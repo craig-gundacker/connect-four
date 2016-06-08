@@ -1,5 +1,6 @@
+package game;
 
-import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -75,7 +76,7 @@ public class ConnectFour extends Application
         primaryStage.show();
     }
     
-    public static void main(String[] args)
+    public static void entry(String[] args)
     {
         launch(args);
     }
@@ -177,9 +178,9 @@ public class ConnectFour extends Application
         
         try
         {
-            Image imgSoundOn = new Image(getClass().getResourceAsStream("sound.png"));
+            Image imgSoundOn = new Image(getClass().getResourceAsStream("resources/sound.png"));
             ImageView imgViewSoundOn = new ImageView(imgSoundOn);
-            Image imgSoundOff = new Image(getClass().getResourceAsStream("sound_delete.png"));
+            Image imgSoundOff = new Image(getClass().getResourceAsStream("resources/sound_delete.png"));
             ImageView imgViewSoundOff = new ImageView(imgSoundOff);
             
             Button btnAudio = new Button();
@@ -188,15 +189,15 @@ public class ConnectFour extends Application
             {
                 if (btnAudio.getGraphic().equals(imgViewSoundOn))
                 {
+                    btnAudio.setGraphic(imgViewSoundOff);
                     mPlayerWin.setMute(true);
                     mPlayerFill.setMute(true);
-                    btnAudio.setGraphic(imgViewSoundOff);
                 }
                 else
                 {
+                    btnAudio.setGraphic(imgViewSoundOn);
                     mPlayerWin.setMute(false);
                     mPlayerFill.setMute(false);
-                    btnAudio.setGraphic(imgViewSoundOn);
                 }            
             });
 
@@ -208,7 +209,7 @@ public class ConnectFour extends Application
         }
         catch (NullPointerException ex)
         {
-            System.err.println(ex.getMessage());
+            ex.printStackTrace();
         }
         return vbVolume;
     }
@@ -217,15 +218,14 @@ public class ConnectFour extends Application
     {
         try
         {
-            File fileWinSound = new File("fireworks.mp3");
-            String pathWinSound = fileWinSound.toURI().toString();
-            Media mediaWin = new Media(pathWinSound);
+            
+            URL resourceWinSound = getClass().getResource("resources/fireworks.mp3");
+            Media mediaWin = new Media(resourceWinSound.toExternalForm());
             mPlayerWin = new MediaPlayer(mediaWin);
             mPlayerWin.volumeProperty().bind(slVolume.valueProperty().divide(100));
 
-            File fileFillSound = new File("tap.aiff");
-            String pathFillSound = fileFillSound.toURI().toString();
-            Media mediaFill = new Media(pathFillSound);        
+            URL resourceFillSound = getClass().getResource("resources/tap.mp3");
+            Media mediaFill = new Media(resourceFillSound.toExternalForm());        
             mPlayerFill = new MediaPlayer(mediaFill);
             mPlayerFill.volumeProperty().bind(slVolume.valueProperty().divide(100));
         }
@@ -391,9 +391,8 @@ public class ConnectFour extends Application
             {
             lblMessage.setTextFill(Color.GREEN);
             lblMessage.setText("It's a draw");
-            File fileDrawSound = new File("draw.mp3");
-            String filePathDrawSound = fileDrawSound.toURI().toString();
-            Media mediaDrawSound = new Media(filePathDrawSound);
+            URL resourceDrawSound = this.getClass().getResource("draw.mp3");
+            Media mediaDrawSound = new Media(resourceDrawSound.toExternalForm());
             mPlayerDrawSound = new MediaPlayer(mediaDrawSound);
             mPlayerDrawSound.play();
             }
